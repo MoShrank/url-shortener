@@ -11,7 +11,7 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={Home} />
+        <Route path="/" element={<Home />} />
         <Route path=":shortUrl" element={Redirect} />
       </Routes>
     </BrowserRouter>
