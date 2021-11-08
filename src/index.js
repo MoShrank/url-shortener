@@ -4,8 +4,8 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Home from "routes/Home";
-import Redirect from "routes/Redirect";
+import Home from "./routes/home";
+import Redirect from "./routes/redirect";
 
 ReactDOM.render(
   <React.StrictMode>
