@@ -12,7 +12,7 @@ ReactDOM.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path=":shortUrl" element={Redirect} />
+        <Route path=":shortUrl" element={<Redirect />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
