@@ -26,7 +26,7 @@ export const createShortUrl = async (url) => {
 
     const currentId = stats.data().urlsCount;
 
-    const shortUrl = encodeUrl(url);
+    const shortUrl = encodeUrl(currentId);
 
     const ref = doc(collection(db, "urls"));
     transaction.set(ref, {
