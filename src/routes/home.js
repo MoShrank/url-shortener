@@ -4,6 +4,8 @@ import { useState } from "react";
 import { checkIfUrlExists, createShortUrl, getShortUrl } from "../api";
 import { validateUrl } from "../util";
 
+import Stats from "../components/stats";
+
 const Home = () => {
   const [url, setUrl] = useState("");
   const [shortUrl, setShortUrl] = useState(null);
@@ -55,6 +57,8 @@ const Home = () => {
 
       {shortUrl && <div>{shortUrl}</div>}
       {error && <p>{error}</p>}
+      <br />
+      <Stats />
     </div>
   );
 };

@@ -7,6 +7,8 @@ import {
   where,
   getDocs,
   limit,
+  orderBy,
+  onSnapshot,
   serverTimestamp,
 } from "firebase/firestore";
 
@@ -78,4 +80,18 @@ export const getUrl = async (shortUrl) => {
   const snap = await getDocs(ref);
   await increaseVisitedCount(snap.docs[0].id);
   return snap.docs[0].data().url;
+};
+
+export const getTopNUrlsByVisits = (updateFunc, numberOfUrls = 5) => {
+  const ref = query(
+    collection(db, "urls"),
+    orderBy("visitedCount"),
+    limit(numberOfUrls)
+  );
+
+  return onSnapshot(ref, (querySnapshot) => {
+    const stats = querySnapshot.docs.map((doc) => doc.data());
+    console.log(stats);
+    updateFunc(stats);
+  });
 };
