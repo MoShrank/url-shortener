@@ -7,6 +7,7 @@ import {
   where,
   getDocs,
   limit,
+  serverTimestamp,
 } from "firebase/firestore";
 
 import { encodeUrl } from "./util";
@@ -30,9 +31,11 @@ export const createShortUrl = async (url) => {
 
     const ref = doc(collection(db, "urls"));
     transaction.set(ref, {
-      number_id: currentId + 1,
+      number_id: currentId,
       url: url,
       shortUrl: shortUrl,
+      tsCreatedAt: serverTimestamp(),
+      visitedCount: 0,
     });
 
     transaction.update(statsRef, {
@@ -43,6 +46,19 @@ export const createShortUrl = async (url) => {
   });
 
   return shortUrl;
+};
+
+const increaseVisitedCount = async (id) => {
+  const urlRef = doc(db, "urls", id);
+
+  await runTransaction(db, async (transaction) => {
+    const stats = await transaction.get(urlRef);
+
+    const currentCount = stats.data().visitedCount;
+    transaction.update(urlRef, {
+      visitedCount: currentCount + 1,
+    });
+  });
 };
 
 export const getShortUrl = async (url) => {
@@ -60,5 +76,6 @@ export const getUrl = async (shortUrl) => {
   );
 
   const snap = await getDocs(ref);
+  await increaseVisitedCount(snap.docs[0].id);
   return snap.docs[0].data().url;
 };
