@@ -15,5 +15,7 @@ export const validateUrl = (urlString) => {
     return false;
   }
 
-  return url.protocol === "http:" || url.protocol === "https:";
+  if (!url.protocol === "http:" && !url.protocol === "https:") return false;
+
+  return url.hostname !== "moritz.dev";
 };
