@@ -5,11 +5,28 @@ import { checkIfUrlExists, createShortUrl, getShortUrl } from "../api";
 import { validateUrl } from "../util";
 
 import Stats from "../components/stats";
+import { transformUrl } from "../util";
+
+const ShortenerForm = ({ url, setUrl, error, handleSubmit }) => {
+  return (
+    <div className="url_form_container">
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder={error}
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+        />
+        <input value="SHORTEN" type="submit" />
+      </form>
+    </div>
+  );
+};
 
 const Home = () => {
   const [url, setUrl] = useState("");
-  const [shortUrl, setShortUrl] = useState(null);
   const [error, setError] = useState(null);
+  const [displayShortUrl, setDisplayShortUrl] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +34,8 @@ const Home = () => {
     let shortUrl = "";
 
     if (!validateUrl(url)) {
-      setError("Url is invalid.");
+      setError("url is invalid!");
+      setUrl("");
       return;
     }
 
@@ -28,36 +46,34 @@ const Home = () => {
     }
 
     setError(null);
-    setShortUrl(shortUrl);
+    transformUrl(url, `https://moritz.dev/${shortUrl}`, setUrl, () =>
+      setDisplayShortUrl(true)
+    );
   };
 
   const handleReset = () => {
     setUrl("");
-    setShortUrl("");
     setError("");
+    setDisplayShortUrl(false);
   };
-
-  /* TODO
-    - styling + fancy animation
-    - stats
-  */
 
   return (
     <div className="home_container">
-      <div>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-          />
-          <input type="submit" />
-        </form>
-      </div>
-
-      {shortUrl && <div>{shortUrl}</div>}
-      {error && <p>{error}</p>}
-      <br />
+      {displayShortUrl ? (
+        <div className="shortened_url_container">
+          <a target="_blank" rel="noopener noreferrer" href={url}>
+            {url}
+          </a>
+          <button onClick={handleReset}>RESET</button>
+        </div>
+      ) : (
+        <ShortenerForm
+          url={url}
+          setUrl={setUrl}
+          error={error}
+          handleSubmit={handleSubmit}
+        />
+      )}
       <Stats />
     </div>
   );

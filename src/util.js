@@ -19,3 +19,36 @@ export const validateUrl = (urlString) => {
 
   return url.hostname !== "moritz.dev";
 };
+
+const timeout = async (timeoutVal) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, timeoutVal);
+  });
+};
+
+export const transformUrl = async (
+  from,
+  to,
+  stateCallbackText,
+  changeViewCallback
+) => {
+  const maxTime = 500;
+
+  let idx = from.length;
+  while (idx > 0) {
+    await timeout(maxTime / from.length);
+    stateCallbackText(from.substring(0, idx));
+    idx--;
+  }
+  changeViewCallback();
+
+  idx = 0;
+
+  while (idx <= to.length) {
+    await timeout(maxTime / to.length);
+    stateCallbackText(to.substring(0, idx));
+    idx++;
+  }
+};
