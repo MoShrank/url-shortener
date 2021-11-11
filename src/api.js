@@ -38,6 +38,7 @@ export const createShortUrl = async (url) => {
       shortUrl: shortUrl,
       tsCreatedAt: serverTimestamp(),
       visitedCount: 0,
+      shortenedCount: 0,
     });
 
     transaction.update(statsRef, {
@@ -48,6 +49,19 @@ export const createShortUrl = async (url) => {
   });
 
   return shortUrl;
+};
+
+const increaseShortenedCount = async (id) => {
+  const urlRef = doc(db, "urls", id);
+
+  await runTransaction(db, async (transaction) => {
+    const stats = await transaction.get(urlRef);
+
+    const currentCount = stats.data().shortenedCount;
+    transaction.update(urlRef, {
+      shortenedCount: currentCount + 1,
+    });
+  });
 };
 
 const increaseVisitedCount = async (id) => {
@@ -67,6 +81,12 @@ export const getShortUrl = async (url) => {
   const ref = query(collection(db, "urls"), where("url", "==", url), limit(1));
 
   const snap = await getDocs(ref);
+
+  /* 
+    tracking should probably be moved if function is used elsewhere
+    than home.js
+  */
+  await increaseShortenedCount(snap.docs[0].id);
   return snap.docs[0].data().shortUrl;
 };
 
@@ -91,7 +111,6 @@ export const getTopNUrlsByVisits = (updateFunc, numberOfUrls = 5) => {
 
   return onSnapshot(ref, (querySnapshot) => {
     const stats = querySnapshot.docs.map((doc) => doc.data());
-    console.log(stats);
     updateFunc(stats);
   });
 };
