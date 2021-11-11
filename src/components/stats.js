@@ -14,7 +14,7 @@ const Stats = () => {
   return (
     <ul>
       {stats.map((item) => (
-        <li>
+        <li key={item.url}>
           {item.url}: {item.visitedCount}
         </li>
       ))}

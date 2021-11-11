@@ -105,7 +105,7 @@ export const getUrl = async (shortUrl) => {
 export const getTopNUrlsByVisits = (updateFunc, numberOfUrls = 5) => {
   const ref = query(
     collection(db, "urls"),
-    orderBy("visitedCount"),
+    orderBy("visitedCount", "desc"),
     limit(numberOfUrls)
   );
 
