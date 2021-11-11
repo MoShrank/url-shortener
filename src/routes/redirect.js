@@ -1,3 +1,5 @@
+import "../style.css";
+
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
@@ -12,7 +14,11 @@ const Redirect = () => {
     });
   }, []);
 
-  return null;
+  return (
+    <div className="loader_container">
+      <div className="loader"></div>
+    </div>
+  );
 };
 
 export default Redirect;
