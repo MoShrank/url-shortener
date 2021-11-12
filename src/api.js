@@ -98,6 +98,8 @@ export const getUrl = async (shortUrl) => {
   );
 
   const snap = await getDocs(ref);
+  if (snap.empty()) throw Error("URL does not exist.");
+
   await increaseVisitedCount(snap.docs[0].id);
   return snap.docs[0].data().url;
 };
