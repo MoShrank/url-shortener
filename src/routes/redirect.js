@@ -9,9 +9,16 @@ const Redirect = () => {
   const params = useParams();
 
   useEffect(() => {
-    getUrl(params.shortUrl).then((url) => {
-      window.location.assign(url);
-    });
+    const redirectToUrl = async () => {
+      try {
+        const url = await getUrl(params.shortUrl);
+        window.location.assign(url);
+      } catch (_) {
+        window.location.assign("/404");
+      }
+    };
+
+    redirectToUrl();
   }, []);
 
   return (
