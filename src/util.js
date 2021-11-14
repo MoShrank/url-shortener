@@ -2,7 +2,16 @@ import base62 from "base62";
 
 export const encodeUrl = (id) => {
   const encoding = base62.encode(id);
-  return encoding;
+  const paddedEncoding = padShortUrl(encoding);
+  return paddedEncoding;
+};
+
+export const padShortUrl = (shortUrl) => {
+  if (shortUrl.length < 6) {
+    shortUrl = shortUrl.padEnd(6, "0");
+  }
+
+  return shortUrl;
 };
 
 export const validateUrl = (urlString) => {
