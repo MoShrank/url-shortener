@@ -61,7 +61,12 @@ const Home = () => {
     <div className="home_container">
       {displayShortUrl ? (
         <div className="shortened_url_container">
-          <a target="_blank" rel="noopener noreferrer" href={url}>
+          <a
+            className="short_url_text"
+            target="_blank"
+            rel="noopener noreferrer"
+            href={url}
+          >
             {url}
           </a>
           <button onClick={handleReset}>RESET</button>

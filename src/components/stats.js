@@ -1,3 +1,5 @@
+import "../style.css";
+
 import { useState, useEffect } from "react";
 
 import { getTopNUrlsByVisits } from "../api";
@@ -12,13 +14,18 @@ const Stats = () => {
   }, []);
 
   return (
-    <ul>
-      {stats.map((item) => (
-        <li key={item.url}>
-          {item.url}: {item.visitedCount}
-        </li>
-      ))}
-    </ul>
+    <div className="stats_container">
+      <h3>Most popular urls:</h3>
+      <ul>
+        {stats.map((item) => (
+          <li key={item.url}>
+            <a target="_blank" rel="noopener noreferrer" href={item.url}>
+              {item.url}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 

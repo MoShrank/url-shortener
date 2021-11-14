@@ -27,7 +27,7 @@ form,
 }
 
 .url_form_container input[type="text"],
-.home_container a {
+.short_url_text {
   border: none;
   outline: none;
   border-bottom: 1px solid #45a29e;
@@ -116,4 +116,29 @@ button:hover {
 
 .not_found_container > a:hover {
   text-decoration: underline;
+}
+
+.stats_container {
+  margin-top: 15%;
+}
+
+.stats_container ul {
+  padding: 0;
+}
+
+.stats_container li {
+  list-style: none;
+  color: white;
+}
+
+.stats_container ul > *:not(:last-child) {
+  margin-bottom: 6px;
+}
+
+.stats_container h3 {
+  color: white;
+}
+
+.stats_container li > a {
+  color: inherit;
 }
