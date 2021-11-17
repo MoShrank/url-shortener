@@ -142,3 +142,7 @@ button:hover {
 .stats_container li > a {
   color: inherit;
 }
+
+.short_url_text:visited {
+  color: #66fcf1;
+}
