@@ -36,7 +36,6 @@ export const db = getFirestore(app);
 ## Shortcomings of my current approach
 
 ### Database Permissions
-
 Since the application is completely frontend based and there is no validation in firebase for any user input, it is theoretically possible to save any document with any field which would basically break the application.
 
 This can partly be prevented by using firebase security rules and validating certain properties such as the fields in a document or the length of the encoded url. Although this seems like the easiest option it still doesn‘t prevent someone from entering a 6 character url that wasn‘t created by the `shortenUrl` function.
@@ -44,10 +43,8 @@ This can partly be prevented by using firebase security rules and validating cer
 The best option would be to create the shortened url in backend, ideally in a firebase cloud function, that way we can make sure to prevent invalid documents/urls.
 
 ### URL Crawling
-
 Another issue that arises due to the nature of the approach is that a user can theoretically crawl all encoded url‘s since the encoding simply works by incrementing an integer and encoding it to base62.
 This option was choosen due to simplicity reasons because it does not cause any collision as for example a hash.
 
 ### Scalability
-The urls
-Since the short urls are supposed to be idempotent, scalability can 
+Since the short urls are supposed to be idempotent, which is achieved as long as entries are not deleted, scalability, in terms of many different urls can be shortened,can only be achieved by adding more characters to the short url. 
