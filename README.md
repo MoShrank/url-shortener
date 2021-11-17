@@ -1,6 +1,7 @@
 # URL Shortener
 
-The url shortener is a simple Frontend based only application that uses Firestore as a backend database. The frontend is written in React/Javascript.
+The url shortener is a simple Frontend based only application that uses Firestore as a backend database. Therefore, queries are directly performed from the frontend to the database.
+The frontend is written in React/Javascript.
 
 The shortening works by assigning each new url an incrementing integer. In order to get the latest id, there is an extra document that saves the total number of URL’s that have already been shortened. This integer is then encoded into base62. If the length of the encoded url is less than 6, it is padded with zeros in the beginning. Using base62 as an encoding, gives us 62^6 (56800235584) possible urls.
 
@@ -29,8 +30,8 @@ export const db = getFirestore(app);
 ```
 
 - install node (>=14.7.0) and npm
-- `npm install` in root directoy
-- `npm run start` to run local server
+- run `npm install` in root directoy
+- run `npm run start` to start local server
 
 
 ## Shortcomings of my current approach
