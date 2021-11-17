@@ -8,7 +8,7 @@ export const encodeUrl = (id) => {
 
 export const padShortUrl = (shortUrl) => {
   if (shortUrl.length < 6) {
-    shortUrl = shortUrl.padEnd(6, "0");
+    shortUrl = shortUrl.padStart(6, "0");
   }
 
   return shortUrl;
@@ -26,7 +26,7 @@ export const validateUrl = (urlString) => {
 
   if (!url.protocol === "http:" && !url.protocol === "https:") return false;
 
-  return url.hostname !== "moritz.dev";
+  return url.hostname !== "url.moritz.dev";
 };
 
 const timeout = async (timeoutVal) => {

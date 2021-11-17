@@ -46,7 +46,7 @@ const Home = () => {
     }
 
     setError(null);
-    transformUrl(url, `https://moritz.dev/${shortUrl}`, setUrl, () =>
+    transformUrl(url, `https://url.moritz.dev/${shortUrl}`, setUrl, () =>
       setDisplayShortUrl(true)
     );
   };
