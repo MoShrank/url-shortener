@@ -1,70 +1,53 @@
-# Getting Started with Create React App
+# URL Shortener
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The url shortener is a simple Frontend based only application that uses Firestore as a backend database. The frontend is written in React/Javascript.
 
-## Available Scripts
+The shortening works by assigning each new url an incrementing integer. In order to get the latest id, there is an extra document that saves the total number of URL’s that have already been shortened. This integer is then encoded into base62. If the length of the encoded url is less than 6, it is padded with zeros in the beginning. Using base62 as an encoding, gives us 62^6 (56800235584) possible urls.
 
-In the project directory, you can run:
+A url can only be shortened if it contains `https://` or `http://` as a prefix.
+Urls from `url.moritz.dev` can not be shortened.
 
-### `npm start`
+## Running it locally
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Running it locally only works if there is a `firebase.js` file under /src that looks like that:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 
-### `npm test`
+const firebaseConfig = {
+  apiKey: <apiKey>,
+  authDomain: <authDomain>,
+  projectId: <projectId>,
+  storageBucket: <storageBucket>,
+  messagingSenderId: <messagingSenderId>,
+  appId: <appId>,
+};
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
+```
 
-### `npm run build`
+- install node (>=14.7.0) and npm
+- `npm install` in root directoy
+- `npm run start` to run local server
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Shortcomings of my current approach
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Database Permissions
 
-### `npm run eject`
+Since the application is completely frontend based and there is no validation in firebase for any user input, it is theoretically possible to save any document with any field which would basically break the application.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+This can partly be prevented by using firebase security rules and validating certain properties such as the fields in a document or the length of the encoded url. Although this seems like the easiest option it still doesn‘t prevent someone from entering a 6 character url that wasn‘t created by the `shortenUrl` function.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The best option would be to create the shortened url in backend, ideally in a firebase cloud function, that way we can make sure to prevent invalid documents/urls.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### URL Crawling
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Another issue that arises due to the nature of the approach is that a user can theoretically crawl all encoded url‘s since the encoding simply works by incrementing an integer and encoding it to base62.
+This option was choosen due to simplicity reasons because it does not cause any collision as for example a hash.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Scalability
+The urls
+Since the short urls are supposed to be idempotent, scalability can 
